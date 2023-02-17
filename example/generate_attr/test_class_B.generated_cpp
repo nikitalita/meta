@@ -24,7 +24,7 @@ void test::test_class_B::init_attr_func_map()
 void test::test_class_B::attr_func_for_interface_4(const std::vector<void*>& data)
 {
     auto p_a = reinterpret_cast<std::remove_reference_t<int>*>(data[0]);
-    auto p_b = reinterpret_cast<std::remove_reference_t<std::string>*>(data[1]);
+    auto p_b = reinterpret_cast<std::remove_reference_t<std::basic_string<char,std::char_traits<char>,std::allocator<char>>>*>(data[1]);
     interface_4(*p_a,*p_b);
 }
 void test::test_class_B::attr_func_for_interface_5(const std::vector<void*>& data) const 
@@ -34,7 +34,7 @@ void test::test_class_B::attr_func_for_interface_5(const std::vector<void*>& dat
 }
 void test::test_class_B::attr_func_for_interface_6(const std::vector<void*>& data)
 {
-    auto p_s = reinterpret_cast<std::remove_reference_t<const std::string &>*>(data[0]);
+    auto p_s = reinterpret_cast<std::remove_reference_t<const std::basic_string<char>&>*>(data[0]);
     interface_6(*p_s);
 }
 
@@ -156,7 +156,8 @@ std::pair<void*, int> test::test_class_B::var_address_for_name(const std::string
 void test::test_class_B::register_types()
 {
     auto cur_type_map = meta::utils::type_map<std::string>();
-    cur_type_map.template register_base_type<std::string>("std::string");
+    cur_type_map.template register_base_type<std::basic_string<char,std::char_traits<char>,std::allocator<char>>>("std::basic_string<char,std::char_traits<char>,std::allocator<char>>");
+    cur_type_map.template register_base_type<std::basic_string<char>>("std::basic_string<char>");
     cur_type_map.template register_base_type<int>("int");
     cur_type_map.template register_base_type<test::test_class_B>("test::test_class_B");
 }// this file should be end of generated cpp file

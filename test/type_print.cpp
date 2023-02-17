@@ -9,6 +9,9 @@
 #include <meta/parser/nodes/class.h>
 #include <meta/parser/nodes/enum.h>
 #include <cstdint>
+#include <SKSE/Impl/PCH.h>
+#include <RE/Skyrim.h>
+
 
 using namespace std;
 using namespace spiritsaway::meta;
@@ -349,16 +352,19 @@ void recursive_print_func_under_namespace(const std::string& ns_name)
 	
 
 }
+
 int main(int argc, char* argv[])
 {
 	CXIndex m_index;
 	CXTranslationUnit m_translationUnit;
-	std::vector<std::string> arguments;
+	std::vector<std::string> arguments = {"-D__cpp_lib_char8_t", "-D__cpp_consteval", "-D__cpp_lib_format", "-DENABLE_SKYRIM_VR", "-DENABLE_SKYRIM_AE",  "-DENABLE_SKYRIM_SE"};
 	arguments.push_back("-x");
 	arguments.push_back("c++");
-	arguments.push_back("-std=c++17");
+	arguments.push_back("-std=c++20");
 	arguments.push_back("-D__meta_parse__");
-	arguments.push_back("-ID:/usr/include/");
+	//C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.34.31933/include/iostream
+	//arguments.push_back("-IC:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.34.31933/include");
+	arguments.push_back("-IC:/Users/Nikita/Workspace/meta/build/vcpkg_installed/x64-windows-static-md/include");
 	arguments.push_back("-fparse-all-comments");
 	std::vector<const char *> cstr_arguments;
 
@@ -368,8 +374,12 @@ int main(int argc, char* argv[])
 	}
 	bool display_diag = true;
 	m_index = clang_createIndex(true, display_diag);
-	std::string file_path = "../../test/test_template.cpp";
-	m_translationUnit = clang_createTranslationUnitFromSourceFile(m_index, file_path.c_str(), static_cast<int>(cstr_arguments.size()), cstr_arguments.data(), 0, nullptr);
+	if (argc <= 1){
+		utils::get_logger().error("usage: type_print <SOURCE_NAME>");
+	}
+	const char * file_path = argv[1];
+	//std::string file_path(argv[2]);
+	m_translationUnit = clang_createTranslationUnitFromSourceFile(m_index, file_path, static_cast<int>(cstr_arguments.size()), cstr_arguments.data(), 0, nullptr);
 	auto cursor = clang_getTranslationUnitCursor(m_translationUnit);
 	auto visitor = [](CXCursor cur, CXCursor parent, CXClientData data)
 	{
@@ -386,7 +396,7 @@ int main(int argc, char* argv[])
 	clang_visitChildren(cursor, visitor, nullptr);
 	//recursive_print_decl_under_namespace("A");
 	//recursive_build_class_node_under_namespace("std");
-	recursive_build_class_node_under_namespace("A");
+	recursive_build_class_node_under_namespace("RE");
 	//recursive_print_func_under_namespace("A");
 	//recursive_print_class_under_namespace("A");
 	json result = language::type_db::instance().to_json();

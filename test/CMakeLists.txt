@@ -27,5 +27,6 @@ target_link_libraries(attr_test PUBLIC nlohmann_json::nlohmann_json)
 add_executable(annotation_test ${CMAKE_CURRENT_SOURCE_DIR}/annotation/annotation_test.cpp)
 target_link_libraries(annotation_test PRIVATE meta)
 
+find_package(CommonLibSSE CONFIG REQUIRED)
 add_executable(type_print ${CMAKE_CURRENT_SOURCE_DIR}/type_print.cpp)
-target_link_libraries(type_print meta ${LIBCLANG_LIBRARY})
+target_link_libraries(type_print meta ${LIBCLANG_LIBRARY} CommonLibSSE::CommonLibSSE)

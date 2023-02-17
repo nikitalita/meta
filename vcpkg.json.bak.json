@@ -1,0 +1,44 @@
+{
+  "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/master/docs/vcpkg.schema.json",
+  "name": "champollion",
+  "version-semver": "1.1.0",
+  "port-version": 0,
+  "description": "Papyrus Script Decompiler.",
+  "homepage": "https://github.com/Orvid/Champollion",
+  "license": "LGPL-3.0-only",
+  "supports": "windows & x64",
+  "dependencies": [
+    "nlohmann-json",
+    "spdlog",
+    {
+      "name": "llvm",
+      "default-features": false,
+      "features": [
+        "clang",
+        "disable-assertions",
+        "enable-bindings",
+        "enable-terminfo",
+        "enable-threads",
+        "enable-rtti",
+        "target-x86",
+        "lld",
+        "tools"
+    
+      ]
+    }
+    {
+      "name": "llvm",
+      "default-features": false,
+      "features": [
+        "compiler-rt"
+      ]
+    }
+    {
+      "name": "llvm",
+      "default-features": false,
+      "features": [
+        "clang"
+      ]
+    }
+  ]
+}
